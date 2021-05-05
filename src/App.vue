@@ -1,25 +1,19 @@
 <template>
- <div id="nav">
-      <router-link :to="{ name: 'HelloWorld' }">Home</router-link> |
-      <router-link :to="{ name: 'Blog' }">Blog</router-link>
-  </div>
+  <header>
+    <nav-bar/>
+  </header>
   <div id="#app">
     <router-view/>
   </div>
 </template>
 
 <script>
+import NavBar from "./components/NavBar.vue"
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: { NavBar }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style src="./assets/styles.css" />

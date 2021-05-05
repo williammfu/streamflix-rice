@@ -1,36 +1,41 @@
 <template>
   <div class="hello">
-    Hello World<br>
-    {{ msg }}
-    <button @click="get">API Call</button>
+    <div class="flex items-center justify-between flex-wrap bg-gray-900">
+      <catalog-item
+      v-for="(movie, idx) in movies" :key="idx"
+      :title="movie.title"
+      :backdrop-path="movie.backdrop_path"
+      class="m-1"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import Movie from '@/api/movies'
+import CatalogItem from './CatalogItem.vue'
 
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  components: { CatalogItem },
+  data() {
+    return {
+      movies: null,
+      currentPage: 1
+    }
   },
-  mounted() {
-    axios.get("https://api.themoviedb.org/3/configuration?api_key=cb707eca4e61a1527fb74eec5cc5009e")
-         .then(res => { console.log(res) })
-  },
-  methods: {
-    async get() {
-      await axios.get(
-        "https://api.themoviedb.org/3/discover/movie?api_key=cb707eca4e61a1527fb74eec5cc5009e&language=id-ID&region=&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate"
-      ).then(res => {
-        console.log(res)
-      })
+  async mounted() {
+    try {
+      const res = await Movie.fetchMovies(this.currentPage)
+      this.movies = res.data.results
+      console.log(this.movies)
+    } catch(e) {
+      console.log('mounted')
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
