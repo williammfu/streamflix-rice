@@ -1,8 +1,7 @@
 <template>
-  <div class="flex items-center flex-wrap bg-gray-900 font-sans text-white text-md font-thin shadow-2xl p-6">
-    <router-link :to="{ name: 'Home' }">Home</router-link>
-    <router-link :to="{ name: 'Blog' }" class="ml-4">Blog</router-link>
-    <span class="ml-4 last:place-items-end">{{ currentCredits }}</span>
+  <div class="fixed w-full flex items-center bg-gray-900 font-sans text-md font-thin shadow-2xl p-6">
+    <router-link class="text-white" :to="{ name: 'Home' }">Home</router-link>
+    <span class="ml-auto font-bold text-xl text-teal-200">{{ currentCredits }}</span>
   </div>
 </template>
 
