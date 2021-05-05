@@ -14,7 +14,6 @@ export default class Movie {
   }
   
   static async fetchMovies(page) {
-    console.log(this.api_key)
     const res = await axios.get(`${this.base_url}discover/movie`, {
       params: {
         api_key: this.api_key,
@@ -27,7 +26,6 @@ export default class Movie {
         with_watch_monetization_types: 'flatrate'
       }
     })
-    console.log(res)
     return res
   }
 }
