@@ -1,6 +1,17 @@
 <template>
-  <div class="home">
-    <div class="grid pt-28 px-8 grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 bg-gray-900">
+  <div id="home" class="bg-gray-900">
+    <div id="button-panel" class="flex">
+      <button :disabled="currentPage <= 1" class="ml-auto mt-28 py-1 px-4 
+       text-teal-400 font-light border border-teal-400
+       transition duration-400 ease-in-out 
+       hover:bg-teal-400 hover:text-gray-100
+       " @click="previousPage"> &lt; </button>
+      <button class="mt-28 mx-2 py-1 px-4 text-teal-400 font-light border border-teal-400 cursor-default">{{ currentPage }}</button>
+      <button class="mt-28 mr-auto py-1 px-4 text-teal-400 font-light border border-teal-400
+       transition duration-400 ease-in-out 
+       hover:bg-teal-400 hover:text-gray-100" @click="nextPage"> &gt; </button>
+    </div>
+    <div class="grid mt-4 px-8 grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5">
         <div v-for="(movie, idx) in movies" :key="idx">
           <catalog-item
           :title="movie.title"
@@ -11,9 +22,6 @@
           @details="goToDetailPage(movie)"
           />
       </div>
-      <button
-      class="p-3 text-white text-xl bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"
-      @click="nextPage">Next Page</button>
     </div>
   </div>
 </template>
@@ -52,6 +60,10 @@ export default {
     },
     searchMovie(id) {
       return this.$store.state.movies.filter(m => m.id === id).length > 0
+    },
+    previousPage() {
+      this.currentPage -= 1
+      this.$router.push({ name: 'Home', query: { page: this.currentPage }})
     },
     nextPage() {
       this.currentPage += 1

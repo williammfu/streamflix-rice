@@ -5,7 +5,7 @@
     alt="Poster"/>
     <div class="w-100% truncate overflow-hidden px-2 pb-8">
       <div class="text-xs font-light mt-2">
-        <div v-show="owns" class="w-1/4 text-teal-500 border py-0.5 px-0.5 border-teal-500">
+        <div v-show="owns" class="w-1/4 text-center text-teal-500 border py-0.5 px-0.5 border-teal-500">
           BOUGHT
         </div>
       </div>

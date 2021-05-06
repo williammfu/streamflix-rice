@@ -5,8 +5,8 @@
         <span class="transition duration-400 ease-in-out text-4xl md:text-5xl text-gray-100 font-black">{{ movie.title }}</span>
         <p class="w-4/5 md:w-2/5 mt-2 text-justify text-xs sm:text-sm text-gray-100 font-light">{{ movie.overview }}</p>
         <div class="text-gray-100 mt-2 mb-4 font-semibold">            
-          <span>{{ movie.vote_average }}</span> |
-          <span>{{ movie.runtime }} minutes</span>
+          <span>{{ movie.vote_average }} ★</span> |
+          <span> 🕑 {{ movie.runtime }} minutes</span>
         </div>
       <span v-for="(genre, idx) in movie.genres" :key="idx" class="px-4 py-2 mr-2 bg-gray-700 bg-opacity-50 text-xs text-gray-100 flex-shrink-0">
         {{ genre.name }}
@@ -21,7 +21,7 @@
       <div v-show="owned">
         <button
         disabled
-        class="my-4 px-5 py-3 bg-gray-900 border border-gray-600 bg-opacity-25 text-sm text-gray-500"
+        class="my-4 px-5 py-3 bg-gray-900 border border-gray-600 bg-opacity-25 text-sm text-gray-400"
         >You already have this movie!
         </button>
       </div>
