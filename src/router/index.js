@@ -26,4 +26,16 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  let price = localStorage.getItem('credit')
+  let movies = JSON.parse(localStorage.getItem('movies'))
+  if(!price) {
+    localStorage.setItem('credit', 100000)
+  }
+  if(movies == null) {
+    localStorage.setItem('movies', JSON.stringify([]))
+  }
+  next()
+})
+
 export default router

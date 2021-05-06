@@ -42,6 +42,7 @@ export default {
   watch: {
     async $route() {
       await this.loadMovies()
+      window.scrollTo(0, 0)
     }
   },
   methods: {

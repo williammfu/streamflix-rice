@@ -56,4 +56,12 @@ export default class Movie {
     return res
   }
 
+  static async fetchSimilar(id) {
+    const res = await axios.get(`${this.base_url}/movie/${id}/similar`, {
+      params: {
+        api_key: this.api_key
+      }
+    })
+    return res
+  }
 }

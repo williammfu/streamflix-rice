@@ -35,7 +35,7 @@
         />
       </div>
       <h2 class="text-gray-100 text-3xl font-semibold mt-4 pb-4">Recommended</h2>
-      <div class="grid grid-cols-7">
+      <div class="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
         <catalog-item
           v-for="(movie, idx) in recommendation" :key="idx"
           :title="movie.title"
@@ -47,6 +47,17 @@
         />
       </div>
       <h2 class="text-gray-100 text-3xl font-semibold mt-4 pb-4">Similar Movies</h2>
+      <div class="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
+        <catalog-item
+          v-for="(movie, idx) in similar" :key="idx"
+          :title="movie.title"
+          :backdrop-path="movie.poster_path"
+          :release-date="movie.release_date"
+          :rating="movie.vote_average.toString()"
+          :owns="searchMovie(movie.id)"
+          @details="goToDetailPage(movie)"
+        />
+      </div>
       </div>
     </div>
   </div>
@@ -63,10 +74,11 @@ export default {
   data() {
     return {
       base_url: 'http://image.tmdb.org/t/p/original',
-      id: parseInt(this.$route.params.id.split('-')[0]),
+      id: null,
       movie: null,
       casts: [],
       recommendation: [],
+      similar: [],
       owned: false
     }
   },
@@ -76,15 +88,17 @@ export default {
                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}` 
     }
   },
+  watch: {
+    async '$route.params'() {
+      if(this.$route.params.id != null) {
+        await this.loadPage()
+        window.scrollTo(0, 0)
+      } 
+    }
+  },
   async mounted() {
     try {
-      const res = await Movie.fetchMovieDetails(this.id)
-      const resCast = await Movie.fetchCasts(this.id)
-      const resRec = await Movie.fetchRecommendations(this.id)
-      this.movie = res.data
-      this.casts = resCast.data.cast.slice(0, 7)
-      this.recommendation = resRec.data.results
-      this.owned = this.$store.state.movies.filter(m => m.id === this.id).length > 0
+      await this.loadPage()
     } catch(e) {
       console.log(e.stack)
     }
@@ -94,11 +108,27 @@ export default {
       let price = this.$store.state.price(this.movie.vote_average)
       this.$store.dispatch('spend', { price })
       this.$store.dispatch('addMovie', { id: this.movie.id, title: this.movie.title })
-      this.owned = true
+      this.owned = this.searchMovie(this.id)
     },
-    goToDetailPage(movie) {
+    async goToDetailPage(movie) {
       let id = `${movie.id}-${movie.title.replace(/\s+/g, '-').toLowerCase()}`
-      this.$router.push({ name: 'MovieDetails', params: {id} })
+      await this.$router.push({ name: 'MovieDetails', params: {id} })
+    },
+    async loadPage() {
+      this.id = parseInt(this.$route.params.id.split('-')[0])
+      
+      // API Call
+      const res = await Movie.fetchMovieDetails(this.id)
+      const resCast = await Movie.fetchCasts(this.id)
+      const resRec = await Movie.fetchRecommendations(this.id)
+      const resSim = await Movie.fetchSimilar(this.id)
+
+      // Assignments
+      this.movie = res.data
+      this.casts = resCast.data.cast.slice(0, 7)
+      this.recommendation = resRec.data.results.slice(0, 7)
+      this.similar = resSim.data.results.slice(0, 7)
+      this.owned = this.$store.state.movies.filter(m => m.id === this.id).length > 0
     },
     searchMovie(id) {
       return this.$store.state.movies.filter(m => m.id === id).length > 0
@@ -108,12 +138,9 @@ export default {
 </script>
 
 <style scoped>
-/* Hide scrollbar for Chrome, Safari and Opera */
 #details::-webkit-scrollbar {
     display: none;
 }
-
-/* Hide scrollbar for IE, Edge and Firefox */
 #details {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */

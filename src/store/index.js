@@ -2,8 +2,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    credit: 100000,
-    movies: [],
+    credit: localStorage.getItem('credit') || 100000,
+    movies: JSON.parse(localStorage.getItem('movies')) || [],
     price: (rating) => {
       if (rating >= 8)
         return 21250
@@ -17,11 +17,14 @@ export default createStore({
   },
   mutations: {
     spend (state, payload) {
-      state.credit -= payload.price
-      localStorage.setItem('price', state.credit) 
+      if(payload.price <= state.credit) {
+        state.credit -= payload.price
+        localStorage.setItem('credit', state.credit)
+      } 
     },
     addMovie (state, payload) {
       state.movies.push(payload)
+      localStorage.setItem('movies', JSON.stringify(state.movies))
     }
   },
   actions: {
