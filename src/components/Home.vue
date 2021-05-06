@@ -7,11 +7,13 @@
           :backdrop-path="movie.poster_path"
           :release-date="movie.release_date"
           :rating="movie.vote_average.toString()"
-          :owns="idx%5 === 0"
-          @details="goToDetailPage(movie.id)"
+          :owns="searchMovie(movie.id)"
+          @details="goToDetailPage(movie)"
           />
       </div>
-      <button class="p-3 text-white text-xl bg-gradient-to-r from-green-300 via-blue-500 to-purple-600" @click="nextPage">Next Page</button>
+      <button
+      class="p-3 text-white text-xl bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"
+      @click="nextPage">Next Page</button>
     </div>
   </div>
 </template>
@@ -29,18 +31,30 @@ export default {
       currentPage: 1
     }
   },
+  async created() {
+    this.currentPage = this.$route.query.page ? parseInt(this.$route.query.page) : 1 
+    await this.loadMovies()
+  },
   async mounted() {
     this.currentPage = this.$route.query.page ? parseInt(this.$route.query.page) : 1 
     await this.loadMovies()
   },
+  watch: {
+    async $route() {
+      await this.loadMovies()
+    }
+  },
   methods: {
-    goToDetailPage(id) {
+    goToDetailPage(movie) {
+      let id = `${movie.id}-${movie.title.replace(/\s+/g, '-').toLowerCase()}`
       this.$router.push({ name: 'MovieDetails', params: {id} })
     },
-    async nextPage() {
+    searchMovie(id) {
+      return this.$store.state.movies.filter(m => m.id === id).length > 0
+    },
+    nextPage() {
       this.currentPage += 1
       this.$router.push({ name: 'Home', query: { page: this.currentPage }})
-      await this.loadMovies()
     },
     async loadMovies() {
       try {

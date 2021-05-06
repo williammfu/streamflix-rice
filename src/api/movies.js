@@ -5,7 +5,7 @@ export default class Movie {
   static api_key = process.env.VUE_APP_API_KEY
 
   static async fetchConf() {
-    const res = await axios.get(`${this.base_url}configuration`, {
+    const res = await axios.get(`${this.base_url}/configuration`, {
       params: {
         api_key: this.api_key
       }
@@ -14,7 +14,7 @@ export default class Movie {
   }
   
   static async fetchMovies(page) {
-    const res = await axios.get(`${this.base_url}discover/movie`, {
+    const res = await axios.get(`${this.base_url}/discover/movie`, {
       params: {
         api_key: this.api_key,
         page: page,
@@ -28,4 +28,32 @@ export default class Movie {
     })
     return res
   }
+
+  static async fetchMovieDetails(id) {
+    const res = await axios.get(`${this.base_url}/movie/${id}`, {
+      params: {
+        api_key: this.api_key
+      }
+    })
+    return res
+  }
+
+  static async fetchCasts(id) {
+    const res = await axios.get(`${this.base_url}/movie/${id}/credits`, {
+      params: {
+        api_key: this.api_key
+      }
+    })
+    return res
+  }
+
+  static async fetchRecommendations(id) {
+    const res = await axios.get(`${this.base_url}/movie/${id}/recommendations`, {
+      params: {
+        api_key: this.api_key
+      }
+    })
+    return res
+  }
+
 }
