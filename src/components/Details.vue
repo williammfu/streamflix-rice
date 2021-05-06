@@ -5,7 +5,7 @@
         <span class="transition duration-400 ease-in-out text-4xl md:text-5xl text-gray-100 font-black">{{ movie.title }}</span>
         <p class="w-4/5 md:w-2/5 mt-2 text-justify text-xs sm:text-sm text-gray-100 font-light">{{ movie.overview }}</p>
         <div class="text-gray-100 mt-2 mb-4 font-semibold">            
-          <span>{{ movie.vote_average }} ★</span> |
+          <span>{{ movie.vote_average }} ★ </span> |
           <span> 🕑 {{ movie.runtime }} minutes</span>
         </div>
       <span v-for="(genre, idx) in movie.genres" :key="idx" class="px-4 py-2 mr-2 bg-gray-700 bg-opacity-50 text-xs text-gray-100 flex-shrink-0">
@@ -141,6 +141,7 @@ export default {
 #details::-webkit-scrollbar {
     display: none;
 }
+
 #details {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */

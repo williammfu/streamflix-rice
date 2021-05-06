@@ -11,7 +11,7 @@
        transition duration-400 ease-in-out 
        hover:bg-teal-400 hover:text-gray-100" @click="nextPage"> &gt; </button>
     </div>
-    <div class="grid mt-4 px-8 grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5">
+    <div id="list" class="grid mt-4 px-8 grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5">
         <div v-for="(movie, idx) in movies" :key="idx">
           <catalog-item
           :title="movie.title"
